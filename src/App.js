@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import * as useAPI from './api/userAPI';
 import { store } from './redux/store';
 
 const App = () => {
@@ -9,26 +10,21 @@ const App = () => {
             setState(store.getState())
         })
     },[])
+
+    useEffect(()=>{
+        store.dispatch({type: `users/fetch_request`})  
+        useAPI.getUsers()
+        .then(data=>{
+            store.dispatch({type:'users/fetch_success',payload:data})
+        })
+        .catch(err=>{
+            store.dispatch({type: 'users/fetch_error',payload:err})
+        })
+    },[])
     
-    const handleUpdateName = () =>{
-        const action = {type:"update_name", name:"LongLong"}
-        store.dispatch(action)
-    }
-    const handleUpdateAge = () =>{
-        const action = {type:"update_age", age:100}
-        store.dispatch(action)
-    }
     return (
         <div className="App">
-            <h1>{state.nameReducer.name}</h1>
-            <h1>{state.ageReducer.age}</h1>
-            <button
-                onClick={handleUpdateName}
-            >UpdateName</button>
-
-            <button
-                onClick={handleUpdateAge}
-            >UpdateAge</button>
+            
         </div>
     );
 }
