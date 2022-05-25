@@ -6,6 +6,7 @@ import { combineReducers, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 
+//step3
 function nameReducer(state={name: 'Hoang'},action){
     if(action.type === "update_name"){
         const newState = {name:action.name}
