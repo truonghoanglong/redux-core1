@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+//step1
 import { combineReducers, createStore } from 'redux';
 
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -28,6 +29,8 @@ const rootReducer = combineReducers({
 
 const composeEnhancers = composeWithDevTools()
 
+
+//step2
 const store = createStore(rootReducer,composeEnhancers)
 
 
