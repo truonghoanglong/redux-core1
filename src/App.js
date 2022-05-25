@@ -1,25 +1,12 @@
 import { useEffect, useState } from 'react';
 import { store } from './redux/store';
 
-
-
-
-
-
-
-
-
-
-
-
-
 const App = () => {
     const [state,setState] = useState(()=>store.getState())
 
     useEffect(()=>{
         store.subscribe(()=>{
             setState(store.getState())
-            console.log(store.getState());
         })
     },[])
     
