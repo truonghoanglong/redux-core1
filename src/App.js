@@ -1,40 +1,42 @@
 import { useEffect, useState } from 'react';
 import * as useAPI from './api/userAPI';
 import Card from './components/Card';
-import { store } from './redux/store';
+import Spinner from './components/Spinner';
+import UserInput from './components/UserInput';
+import { useDispatch, useSelector } from './redux/react-redux';
 
 const App = () => {
-    const [state,setState] = useState(()=>store.getState())
-    const { data: users,loading,error} = state.userReducer ; 
+    const [editUser,setEditUser] = useState()
+
+    const { data: users, loading, error } = useSelector(state => state.userReducer)
+
+    const dispatch = useDispatch()
 
     useEffect(()=>{
-        store.subscribe(()=>{
-            setState(store.getState())
-        })
-    },[])
-
-    useEffect(()=>{
-        store.dispatch({type: `users/fetch_request`})  
+        dispatch({type: `users/fetch_request`})  
         useAPI.getUsers()
         .then(data=>{
-            store.dispatch({type:'users/fetch_success',payload:data})
+            dispatch({type:'users/fetch_success',payload:data})
         })
         .catch(err=>{
-            store.dispatch({type: 'users/fetch_error',payload:err})
+            dispatch({type: 'users/fetch_error',payload:err})
         })
-    },[])
+    },[dispatch])
     
     return (
         <div className="wrap">
+            {error && <span>{error.message}</span>}
+            <UserInput editUser={editUser} setEditUser={setEditUser} />
             <div className="card_container">
-                {
+                { users && users.length > 0 &&
                     users.map(user => (
                         <div className="" key={user.id}>
-                            <Card user={user} />
+                            <Card user={user} setEditUser={setEditUser} />
                         </div>
                     ))
                 } 
             </div>
+            { loading && <Spinner /> }
         </div>
     );
 }
